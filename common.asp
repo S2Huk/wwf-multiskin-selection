@@ -15,16 +15,11 @@
 <%
 
 '## Multiskin Selection Mod ##
-
 %>
 <!-- #include file="includes/s2h_skinfile.asp" -->
 <!-- #include file="functions/s2h_multiskin.asp" -->
 <%
-
 '## Multiskin Selection Mod ##
-
-
-
 
 '****************************************************************************************
 '**  Copyright Notice    
@@ -43,13 +38,13 @@
 '**  If you have not received a copy of the license with this work then a copy of the latest
 '**  license contract can be found at:-
 '**
-'**  http://www.webwizguide.com/license
+'**  http://www.webwiz.co.uk/license
 '**
 '**  For more information about this software and for licensing information please contact
 '**  'Web Wiz' at the address and website below:-
 '**
 '**  Web Wiz, Unit 10E, Dawkins Road Industrial Estate, Poole, Dorset, BH15 4JD, England
-'**  http://www.webwizguide.com
+'**  http://www.webwiz.co.uk
 '**
 '**  Removal or modification of this copyright notice will violate the license contract.
 '**
@@ -60,7 +55,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.2.1
+'**	Version:	3.2.2
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -264,9 +259,6 @@ If intGroupID = 2 Then
 Else
 	strUploadFilePath = strUploadFilePath & "/" & lngLoggedInUserID
 End If
-
-
-
 
 
 '## Multiskin Selection Mod ##

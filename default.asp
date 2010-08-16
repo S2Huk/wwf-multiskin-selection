@@ -5,12 +5,8 @@
 <%
 
 '## Multiskin Selection Mod ##
-
-%>
-<!--#include file="language_files/language_s2h.asp" -->
-<%
+%><!--#include file="language_files/language_s2h.asp" --><%
 '## Multiskin Selection Mod ##
-
 
 '****************************************************************************************
 '**  Copyright Notice    
@@ -29,13 +25,13 @@
 '**  If you have not received a copy of the license with this work then a copy of the latest
 '**  license contract can be found at:-
 '**
-'**  http://www.webwizguide.com/license
+'**  http://www.webwiz.co.uk/license
 '**
 '**  For more information about this software and for licensing information please contact
 '**  'Web Wiz' at the address and website below:-
 '**
 '**  Web Wiz, Unit 10E, Dawkins Road Industrial Estate, Poole, Dorset, BH15 4JD, England
-'**  http://www.webwizguide.com
+'**  http://www.webwiz.co.uk
 '**
 '**  Removal or modification of this copyright notice will violate the license contract.
 '**
@@ -46,7 +42,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.2.1
+'**	Version:	3.2.2
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -408,12 +404,13 @@ If blnRSS Then strStatusBarTools = strStatusBarTools & "&nbsp;<a href=""RSS_topi
 %>
 <!-- #include file="includes/browser_page_encoding_inc.asp" -->
 <title><% = strMainForumName %><% If blnLCode Then Response.Write(" - Powered by Web Wiz Forums&trade;") %></title>
-<meta name="generator" content="Web Wiz Forums" /><%
+<meta name="generator" content="Web Wiz Forums" />
+<link rel="canonical" href="<% = strForumPath %>" /><%
 
 '***** START WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
 If blnLCode Then	
  	Response.Write(vbCrLf & "<meta name=""description"" content=""This is a discussion forum powered by Web Wiz Forums. To find out about Web Wiz Forums, go to http://www.webwizforums.com"" />" & _
- 	vbCrLf & "<meta name=""keywords"" content=""forum, bbs, discussion, bulletin board, message board"" />")
+ 	vbCrLf & "<meta name=""keywords"" content=""forum, forums, bbs, discussion, bulletin board, message board"" />")
 End If
 
 Response.Write(vbCrLf  & vbCrLf & "<!--//" & _
@@ -979,7 +976,7 @@ If blnLCode = True Then
   		If blnACode Then Response.Write("<br /><span class=""text"" style=""font-size:10px"">Powered by Web Wiz Forums Free Express Edition</span>")
 	End If
 	
-	Response.Write("<br /><span class=""text"" style=""font-size:10px"">Copyright &copy;2001-2010 <a href=""http://www.webwizguide.com"" target=""_blank"" style=""font-size:10px"">Web Wiz</a></span>")
+	Response.Write("<br /><span class=""text"" style=""font-size:10px"">Copyright &copy;2001-2010 <a href=""http://www.webwiz.co.uk"" target=""_blank"" style=""font-size:10px"">Web Wiz</a></span>")
 End If
 '***** END WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
 

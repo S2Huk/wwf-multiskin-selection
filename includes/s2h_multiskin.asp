@@ -37,7 +37,7 @@
 		Response.Write("<strong>" & strTxtS2HMSSCurrentSkin & ":</strong> " & saryS2HSiteSkins(intS2HLoggedInUserSkin, 1))
 		if saryS2HSiteSkins(intS2HLoggedInUserSkin, 5) <> "" then response.Write(", <strong>" & strTxtS2HMSSSkinAuthor & ":</strong> " & saryS2HSiteSkins(intS2HLoggedInUserSkin, 5) & "<br>")
  %>
-	<!-- 'Multiskin Selection v3.2.1' by Scotty32 - www.s2h.co.uk/wwf/ -->
+	<!-- 'Multiskin Selection v3.2.2' by Scotty32 - www.s2h.co.uk/wwf/ -->
 		</td>
 	</tr>
 	</table>

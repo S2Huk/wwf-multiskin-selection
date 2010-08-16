@@ -6,7 +6,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.2.1
+'**	Version:	3.2.2
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -22,7 +22,8 @@
 	' 3 = Skin CSS Path
 	' 4 = Skin Breadcrum Seperator
 	' 5 = Skin Author (Optional if you wish to give credit to the Skin Author)
-	' 6 = Banner Image (leave blank to use default)
+	' 6 = Banner Image (leave blank to use default)
+
 
     ' Define Variables
     '============================

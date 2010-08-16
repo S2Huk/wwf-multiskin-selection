@@ -15,14 +15,12 @@
 '**	=========================
 '**
 '**	 Advanced IP Banning		Version: 0.0.1 (beta)
-'**	 Latest Topics	 		Version: 1.2.0
+'**	 Latest Topics	 		Version: 1.2.1
 '**	 Multi Media Functions		Version: 2.01
-'**	 Multiskin Selection 		Version: 3.2.1
-'**	 SideBar Navigation 		Version: 1.00
-'**	 Who Visited Today 		Version: 2.0.9
-'**	 Whos Viewing This Topic	Version: 2.0.0 (beta)
-'**
-'**	 Social Bookmarking 		Version: 1.00 (obsolete)
+'**	 Multiskin Selection 		Version: 3.2.2
+'**	 SideBar Navigation 		Version: 1.0.1
+'**	 Who Visited Today 		Version: 2.0.10
+'**	 Whos Viewing This Topic	Version: 2.0
 '**
 '****************************************************************************************
 
@@ -70,15 +68,6 @@ Const strTxtS2HWVTNoVisits		= "Sorry, no members have visited the forum today."
 Const strTxtS2HWVTMembers		= "Members"
 
 
-'**	 Testing New Modifications
-'****************************************************************************************
-
-' Advanced IP Banning
-'---------------------------------------------------------------------------------
-Const strTxtS2HAIPBIPAddressOrRange 	= "Check IP Address or Range"
-Const strTxtS2HAIPBIPAddressRange	= "Check IP Address/Range"
-
-
 ' Whos Viewing This Topic
 '---------------------------------------------------------------------------------
 Const strTxtS2HWVTTViewingForum		= "Current active users viewing this forum: "
@@ -89,11 +78,12 @@ Const strTxtS2HWVTTMembers		= "Members: "
 Const strTxtS2HWVTTGuests		= "Guests: "
 
 
-'**	 Obsolete Modifications
+'**	 Testing New Modifications
 '****************************************************************************************
 
-' Social Bookmarking
+' Advanced IP Banning
 '---------------------------------------------------------------------------------
-Const strTxtS2HSBHeader			= "Bookmark"
+Const strTxtS2HAIPBIPAddressOrRange 	= "Check IP Address or Range"
+Const strTxtS2HAIPBIPAddressRange	= "Check IP Address/Range"
 
 %>
