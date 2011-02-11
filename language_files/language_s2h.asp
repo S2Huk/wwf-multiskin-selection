@@ -3,8 +3,10 @@
 '**
 '**	 File Created by Scotty32 (www.s2h.co.uk)
 '**
-'****************************************************************************************
+'**	 S2H Languge File
+'**	---------------------
 '**
+'**	Version:	1.1.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -14,13 +16,13 @@
 '**	 Modifications supported
 '**	=========================
 '**
-'**	 Advanced IP Banning		Version: 0.0.1 (beta)
-'**	 Latest Topics	 		Version: 1.2.1
-'**	 Multi Media Functions		Version: 2.01
-'**	 Multiskin Selection 		Version: 3.2.2
-'**	 SideBar Navigation 		Version: 1.0.1
-'**	 Who Visited Today 		Version: 2.0.10
-'**	 Whos Viewing This Topic	Version: 2.0
+'**	 Latest Topics
+'**	 Multi Media Functions
+'**	 Multiskin Selection
+'**	 Reputation Mod
+'**	 SideBar Navigation
+'**	 Who Visited Today
+'**	 Whos Viewing This Topic
 '**
 '****************************************************************************************
 
@@ -49,6 +51,30 @@ Const strTxtS2HMSSSelectSkin		= "Select Your Skin"
 Const strTxtS2HMSSSkinDetails		= "Forum Skin Details"
 Const strTxtS2HMSSCurrentSkin		= "Current Skin"
 Const strTxtS2HMSSSkinAuthor		= "Author"
+Const strTxtS2HMSSSkinSubmit		= "Go"
+
+
+' Reputation Mod
+'---------------------------------------------------------------------------------
+Const strS2HRMTitle			= "Post Rating"
+Const strS2HRMBtnClose			= "Close Window"
+Const strS2HRMComplete			= "Your vote has been added"
+Const strS2HRMUser			= "User"
+Const strS2HRMDate			= "Date"
+Const strS2HRMUp			= "Up"
+Const strS2HRMDown			= "Down"
+Const strS2HRMNeutral			= "Neutral"
+Const strS2HRMActive			= "Active: Click to deactive."
+Const strS2HRMDeActive			= "In-Active: Click to activate."
+Const strS2HRMVoteUp			= "Up rate this post"
+Const strS2HRMVoteDown			= "Down rate this post"
+Const strS2HRMErrGuest			= "Guests cannot rate posts. You must be logged in to vote"
+Const strS2HRMErrNotFound		= "Post could not be found."
+Const strS2HRMErrGeneral		= "There was a problem with the rating, please try again."
+Const strS2HRMErrRepeat			= "You have already rated this post."
+Const strS2HRMErrSelf			= "You cannot rate your own posts."
+Const strS2HRMErrDate			= "You cannot rate posts that are older than one month."
+Const strS2HRMErrNoVotes		= "There are no votes for this post"
 
 
 ' SideBar Navigation

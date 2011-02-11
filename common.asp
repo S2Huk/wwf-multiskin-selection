@@ -10,7 +10,7 @@
 <!-- #include file="functions/functions_filters.asp" -->
 <!-- #include file="functions/functions_windows_authentication.asp" -->
 <!-- #include file="functions/functions_member_API.asp" -->
-<!-- #include file="includes/google_adsense_inc.asp" -->
+<!-- #include file="includes/ads_inc.asp" -->
 <!-- #include file="functions/functions_report_errors.asp" -->
 <%
 
@@ -27,7 +27,7 @@
 '**  Web Wiz Forums(TM)
 '**  http://www.webwizforums.com
 '**                            
-'**  Copyright (C)2001-2010 Web Wiz(TM). All Rights Reserved.
+'**  Copyright (C)2001-2011 Web Wiz(TM). All Rights Reserved.
 '**  
 '**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM 'WEB WIZ'.
 '**  
@@ -55,7 +55,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.2.2
+'**	Version:	3.3.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -181,7 +181,29 @@ End If
 
 
 
+'******************************************
+'***   Mobile/Classic View Switch      ****
+'******************************************
 
+If blnMobileBrowser Then 
+	
+	'Mobile/Classic View user switch
+	If Request.QueryString("MobileView") = "off" Then
+		Call setCookie("MobileView", "MV", "0", True)
+		blnMobileBrowser = False
+		blnMobileClassicView = True
+	
+	ElseIf Request.QueryString("MobileView") = "on" Then
+		Call setCookie("MobileView", "MV", "1", True)
+		blnMobileBrowser = True
+		blnMobileClassicView = False
+	
+	'Check to see if mobile view is switched off for this session, if so switch blnMobileBrowser to false
+	ElseIf getCookie("MobileView", "MV") = "0" Then 
+		blnMobileBrowser = False
+		blnMobileClassicView = True
+	End If
+End If
 
 
 
@@ -210,6 +232,9 @@ End If
 
 'Debugging info
 If Request.QueryString("about") Then Call about()
+	
+'If mobile browser switch the CSS style
+If blnMobileBrowser Then strCSSfile = strCSSfile & "mobile_"
 
 
 
@@ -242,13 +267,14 @@ strBreadCrumbTrail = "<img src=""" & strImagePath & "forum_home." & strForumImag
 
 
 
+
 '******************************************
 '***  Initialise Upload Path Settings  ****
 '******************************************
 
 'Intilise the file upload path for this user
 
-'For security the upload path is set below at global scale so users NEVER seee other users upload directory
+'For security the upload path is set below so users NEVER see other users upload directory
 'However we may need the parent upload directory for admin/moderator purposes
 strUploadOriginalFilePath = strUploadFilePath
 
@@ -259,6 +285,14 @@ If intGroupID = 2 Then
 Else
 	strUploadFilePath = strUploadFilePath & "/" & lngLoggedInUserID
 End If
+
+
+'Turn off some options for mobile browsers
+If blnMobileBrowser Then 
+	blnRSS = False
+	blnShowProcessTime = False
+End If
+
 
 
 '## Multiskin Selection Mod ##
