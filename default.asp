@@ -42,7 +42,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.3.0
+'**	Version:	3.3.1
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -130,7 +130,7 @@ Dim strSubject			'Holds the subject
 Dim lngSubTopicID		'Holds the topic ID
 Dim strSubSubject		'Holds the subject
 Dim strNewPostText
-Dim strPageQueryString		'Holds the querystring for the page
+Dim strPageQueryString		'Holds the querystring for the page	
 
 
 '## MultiSkin Mod ##
@@ -956,7 +956,6 @@ If blnMobileBrowser = False Then
 				
 				intActiveGuests = intActiveGuests + 1
 			
-
 			'Else if the user is Anonymous increment the Anonymous count
 			ElseIf CBool(saryActiveUsers(8, intArrayPass)) Then	
 				
@@ -1016,16 +1015,16 @@ End If
 
 <div align="center">
 <span class="smText"><a href="mark_posts_as_read.asp<% If strSessionID <> "" Then Response.Write("?XID=" & getSessionItem("KEY") & strQsSID2) %>" class="smLink"><% = strTxtMarkAllPostsAsRead %></a> :: <a href="remove_cookies.asp<% If strSessionID <> "" Then Response.Write("?XID=" & getSessionItem("KEY") & strQsSID2) %>" class="smLink"><% = strTxtDeleteCookiesSetByThisForum %></a>
-<br /><%
+<br /></span><%
 
 'If a mobile browser display an option to switch to and from mobile view
 If blnMobileBrowser Then 
-	Response.Write ("<br /><a href=""?MobileView=off" & strQsSID2 & """ rel=""nofollow"">" & strTxtSwitchToClassicView & "</a>")
+	Response.Write ("<br />" & strTxtViewIn & ": <strong>" & strTxtMoble & "</strong> | <a href=""?MobileView=off" & strQsSID2 & """ rel=""nofollow"">" & strTxtClassic & "</a>")
 ElseIf blnMobileClassicView Then
-	Response.Write ("<br /><a href=""?MobileView=on" & strQsSID2 & """ rel=""nofollow"">" & strTxtSwitchToMobileView & "</a>")
+	Response.Write ("<br />" & strTxtViewIn & ": <a href=""?MobileView=on" & strQsSID2 & """ rel=""nofollow"">" & strTxtMoble & "</a> | <strong>" & strTxtClassic & "</strong>")
 End If
 
-%><br /><br /><% = strTxtCookies %></span><br /><br /><%
+%><span class="smText"><br /><br /><% = strTxtCookies %></span><br /><br /><%
     
 '***** START WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
 If blnLCode = True Then
