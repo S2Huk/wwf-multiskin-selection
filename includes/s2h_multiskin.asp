@@ -6,7 +6,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.3.1
+'**	Version:	3.4.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -105,6 +105,6 @@
 <%
     end if
 %>
-	<!-- 'Multiskin Selection v3.3.0' by Scotty32 - www.s2h.co.uk/wwf/ -->
+	<!-- 'Multiskin Selection v3.4.0' by Scotty32 - www.s2h.co.uk/wwf/ -->
 
 	<br />

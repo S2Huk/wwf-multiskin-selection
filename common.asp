@@ -1,5 +1,5 @@
-<!-- #include file="includes/global_variables_inc.asp" -->
 <!-- #include file="includes/setup_options_inc.asp" -->
+<!-- #include file="includes/global_variables_inc.asp" -->
 <!-- #include file="includes/version_inc.asp" -->
 <!-- #include file="database/database_connection.asp" -->
 <!-- #include file="language_files/language_file_inc.asp" -->
@@ -10,16 +10,15 @@
 <!-- #include file="functions/functions_filters.asp" -->
 <!-- #include file="functions/functions_windows_authentication.asp" -->
 <!-- #include file="functions/functions_member_API.asp" -->
-<!-- #include file="includes/ads_inc.asp" -->
 <!-- #include file="functions/functions_report_errors.asp" -->
 <%
 
-'## Multiskin Selection Mod ##
+'## Start S2H "MultiSkin Selection" Mod ##
 %>
 <!-- #include file="includes/s2h_skinfile.asp" -->
 <!-- #include file="functions/s2h_multiskin.asp" -->
 <%
-'## Multiskin Selection Mod ##
+'## End S2H "MultiSkin Selection" Mod ##
 
 '****************************************************************************************
 '**  Copyright Notice    
@@ -27,11 +26,11 @@
 '**  Web Wiz Forums(TM)
 '**  http://www.webwizforums.com
 '**                            
-'**  Copyright (C)2001-2011 Web Wiz(TM). All Rights Reserved.
+'**  Copyright (C)2001-2011 Web Wiz Ltd. All Rights Reserved.
 '**  
-'**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM 'WEB WIZ'.
+'**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM WEB WIZ LTD.
 '**  
-'**  IF YOU DO NOT AGREE TO THE LICENSE AGREEMENT THEN 'WEB WIZ' IS UNWILLING TO LICENSE 
+'**  IF YOU DO NOT AGREE TO THE LICENSE AGREEMENT THEN WEB WIZ LTD. IS UNWILLING TO LICENSE 
 '**  THE SOFTWARE TO YOU, AND YOU SHOULD DESTROY ALL COPIES YOU HOLD OF 'WEB WIZ' SOFTWARE
 '**  AND DERIVATIVE WORKS IMMEDIATELY.
 '**  
@@ -43,7 +42,7 @@
 '**  For more information about this software and for licensing information please contact
 '**  'Web Wiz' at the address and website below:-
 '**
-'**  Web Wiz, Unit 10E, Dawkins Road Industrial Estate, Poole, Dorset, BH15 4JD, England
+'**  Web Wiz Ltd, Unit 10E, Dawkins Road Industrial Estate, Poole, Dorset, BH15 4JD, England
 '**  http://www.webwiz.co.uk
 '**
 '**  Removal or modification of this copyright notice will violate the license contract.
@@ -55,7 +54,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.3.1
+'**	Version:	3.4.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -81,13 +80,14 @@ Server.ScriptTimeout = 90
 Session.Timeout = 20
 
 'Set the date time format to your own locale if you are getting a CDATE error
-'(this shouldn't ever be required in version 8 or above, but left in for backward compatibility)
 'Session.LCID = 1033
+
 
 
 
 'If there is no database set then need to run the installation setup
 If strDatabaseType = "" Then Response.Redirect("setup.asp")
+
 
 
 '******************************************
@@ -111,7 +111,8 @@ Call getForumConfigurationData()
 '******************************************
 
 'Call sub to get session data if not a search engine spider (also imporves serach engine indexing)
-If NOT strOSType = "Search Robot" Then Call getSessionData() 
+If (blnSearchEngineSessions = True AND strOSType = "Search Robot") OR NOT strOSType = "Search Robot" Then Call getSessionData() 
+	
 	
 
 
@@ -141,8 +142,6 @@ Call getUserData("UID")
 '***  	  Setup Last Visit Data        ****
 '******************************************
 
-
-
 'Make sure the variable is of  a date datatype
 If isDate(dtmLastVisitDate) Then dtmLastVisitDate = CDate(dtmLastVisitDate)
 
@@ -154,7 +153,7 @@ If dtmLastVisitDate = "" AND isDate(getCookie("lVisit", "LV")) Then
 	Call saveSessionItem("LV", internationalDateTime(getCookie("lVisit", "LV")))
 	
 	'Intilise the last date variable
-	dtmLastVisitDate = CDate(getCookie("lVisit", "LV"))
+	dtmLastVisitDate = DateC(getCookie("lVisit", "LV"))
 	
 	'Save new cookie
 	Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
@@ -169,7 +168,7 @@ End If
 'If the cookie is older than 1 minute set a new one
 If IsDate(getCookie("lVisit", "LV")) Then
 
-	If CDate(getCookie("lVisit", "LV")) < DateAdd("n", -1, Now()) Then
+	If DateC(getCookie("lVisit", "LV")) < DateAdd("n", -1, Now()) Then
 		Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
 	End If
 
@@ -181,12 +180,16 @@ End If
 
 
 
+
+
+
 '******************************************
 '***   Mobile/Classic View Switch      ****
 '******************************************
 
-If blnMobileBrowser Then 
-	
+'If a mobile browser, mobile view enabled, and not have a mobile URL
+If blnMobileBrowser AND blnMobileView Then
+
 	'Mobile/Classic View user switch
 	If Request.QueryString("MobileView") = "off" Then
 		Call setCookie("MobileView", "MV", "0", True)
@@ -197,13 +200,19 @@ If blnMobileBrowser Then
 		Call setCookie("MobileView", "MV", "1", True)
 		blnMobileBrowser = True
 		blnMobileClassicView = False
-	
+
 	'Check to see if mobile view is switched off for this session, if so switch blnMobileBrowser to false
 	ElseIf getCookie("MobileView", "MV") = "0" Then 
 		blnMobileBrowser = False
 		blnMobileClassicView = True
 	End If
+
+'Else if Mobile View is disable
+ElseIf blnMobileBrowser AND blnMobileView = False Then
+
+	blnMobileBrowser = False
 End If
+
 
 
 
@@ -228,6 +237,7 @@ If blnGuest AND blnGuestSessions = false Then
 	strQsSID = ""
 	strQsSID1 = ""
 	strQsSID2 = ""
+	strQsSID3 = ""
 End If
 
 'Debugging info
@@ -235,7 +245,6 @@ If Request.QueryString("about") Then Call about()
 	
 'If mobile browser switch the CSS style
 If blnMobileBrowser Then strCSSfile = strCSSfile & "mobile_"
-
 
 
 
@@ -295,7 +304,7 @@ End If
 
 
 
-'## Multiskin Selection Mod ##
+'## Start S2H "MultiSkin Selection" Mod ##
 
 '*****************************************
 '***    Get the visitors Skin Info    ****
@@ -305,7 +314,7 @@ End If
 
 Call S2HGetUsersSkin()
 
+'## End S2H "MultiSkin Selection" Mod ##
 
-'## Multiskin Selection Mod ##
 
 %>

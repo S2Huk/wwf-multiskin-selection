@@ -4,9 +4,9 @@
 <!--#include file="functions/functions_date_time_format.asp" -->
 <%
 
-'## Multiskin Selection Mod ##
-%><!--#include file="language_files/language_s2h.asp" --><%
-'## Multiskin Selection Mod ##
+'## Start S2H "MultiSkin Selection" Mod ##
+%><!--#include file="language_files/s2h_language_v10.asp" --><%
+'## End S2H "MultiSkin Selection" Mod ##
 
 '****************************************************************************************
 '**  Copyright Notice    
@@ -14,11 +14,11 @@
 '**  Web Wiz Forums(TM)
 '**  http://www.webwizforums.com
 '**                            
-'**  Copyright (C)2001-2011 Web Wiz(TM). All Rights Reserved.
+'**  Copyright (C)2001-2011 Web Wiz Ltd. All Rights Reserved.
 '**  
-'**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM 'WEB WIZ'.
+'**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM WEB WIZ LTD.
 '**  
-'**  IF YOU DO NOT AGREE TO THE LICENSE AGREEMENT THEN 'WEB WIZ' IS UNWILLING TO LICENSE 
+'**  IF YOU DO NOT AGREE TO THE LICENSE AGREEMENT THEN WEB WIZ LTD. IS UNWILLING TO LICENSE 
 '**  THE SOFTWARE TO YOU, AND YOU SHOULD DESTROY ALL COPIES YOU HOLD OF 'WEB WIZ' SOFTWARE
 '**  AND DERIVATIVE WORKS IMMEDIATELY.
 '**  
@@ -30,7 +30,7 @@
 '**  For more information about this software and for licensing information please contact
 '**  'Web Wiz' at the address and website below:-
 '**
-'**  Web Wiz, Unit 10E, Dawkins Road Industrial Estate, Poole, Dorset, BH15 4JD, England
+'**  Web Wiz Ltd, Unit 10E, Dawkins Road Industrial Estate, Poole, Dorset, BH15 4JD, England
 '**  http://www.webwiz.co.uk
 '**
 '**  Removal or modification of this copyright notice will violate the license contract.
@@ -42,7 +42,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.3.1
+'**	Version:	3.4.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -100,6 +100,7 @@ Dim blnHideForum		'Set to true if this is a hidden forum
 Dim intCatShow			'Holds the ID number of the category to show if only showing one category
 Dim intActiveUsers		'Holds the number of active users
 Dim intActiveGuests		'Holds the number of active guests
+Dim intActiveSearchRobots
 Dim intActiveMembers		'Holds the number of logged in active members
 Dim strMembersOnline		'Holds the names of the members online
 Dim intSubForumID		'Holds the sub forum ID number
@@ -130,12 +131,14 @@ Dim strSubject			'Holds the subject
 Dim lngSubTopicID		'Holds the topic ID
 Dim strSubSubject		'Holds the subject
 Dim strNewPostText
-Dim strPageQueryString		'Holds the querystring for the page	
+Dim strPageQueryString		'Holds the querystring for the page
+Dim strForumImageIcon		'Hold an image icon for the forum
+Dim strForumURL			'Holds the forum URL if a forum link
 
 
-'## MultiSkin Mod ##
+'## Start S2H "MultiSkin Selection" Mod ##
 Dim intS2HNewSkinID
-'## MultiSkin Mod ##
+'## End S2H "MultiSkin Selection" Mod ##
 
 
 
@@ -152,6 +155,9 @@ intAnonymousMembers = 0
 lngTotalRecords = 0
 lngNoOfMembers = 0
 intBirtdayLoopCounter = 0
+intActiveSearchRobots = 0
+
+
 
 
 'Read in the qerystring
@@ -166,10 +172,9 @@ Call SqlInjectionTest(strPageQueryString)
 
 
 
-
 'Read in the category to show
 If IsNumeric(Request.QueryString("C")) Then
-	intCatShow = CInt(Request.QueryString("C"))
+	intCatShow = IntC(Request.QueryString("C"))
 Else
 	intCatShow = 0
 End If
@@ -188,7 +193,7 @@ ElseIf isArray(Session("sarryUnReadPosts")) Then
 End If
 
 
-'## S2H MultiSkin Mod ##
+'## Start S2H "MultiSkin Selection" Mod ##
 
 intS2HNewSkinID = Request.QueryString("SC")
 if isNumeric(intS2HNewSkinID) then intS2HNewSkinID = cint(intS2HNewSkinID) else intS2HNewSkinID = 0
@@ -199,7 +204,7 @@ if intS2HNewSkinID <> 0 then
 	Response.Redirect("default.asp" & strQsSID1)
 end if
 
-'## S2H MultiSkin Mod ##
+'## End S2H "MultiSkin Selection" Mod ##
 
 
 
@@ -208,7 +213,7 @@ end if
 'Read the various categories, forums, and permissions from the database in one hit for extra performance
 'Initalise the strSQL variable with an SQL statement to query the database
 strSQL = "" & _
-"SELECT " & strDbTable & "Category.Cat_ID, " & strDbTable & "Category.Cat_name, " & strDbTable & "Forum.Forum_ID, " & strDbTable & "Forum.Sub_ID, " & strDbTable & "Forum.Forum_name, " & strDbTable & "Forum.Forum_description, " & strDbTable & "Forum.No_of_topics, " & strDbTable & "Forum.No_of_posts, " & strDbTable & "Author.Username, " & strDbTable & "Forum.Last_post_author_ID, " & strDbTable & "Forum.Last_post_date, " & strDbTable & "Forum.Password, " & strDbTable & "Forum.Locked, " & strDbTable & "Forum.Hide, " & strDbTable & "Permissions.View_Forum, " & strDbTable & "Forum.Last_topic_ID, " & strDbTable & "Topic.Subject " & _
+"SELECT " & strDbTable & "Category.Cat_ID, " & strDbTable & "Category.Cat_name, " & strDbTable & "Forum.Forum_ID, " & strDbTable & "Forum.Sub_ID, " & strDbTable & "Forum.Forum_name, " & strDbTable & "Forum.Forum_description, " & strDbTable & "Forum.No_of_topics, " & strDbTable & "Forum.No_of_posts, " & strDbTable & "Author.Username, " & strDbTable & "Forum.Last_post_author_ID, " & strDbTable & "Forum.Last_post_date, " & strDbTable & "Forum.Password, " & strDbTable & "Forum.Locked, " & strDbTable & "Forum.Hide, " & strDbTable & "Permissions.View_Forum, " & strDbTable & "Forum.Last_topic_ID, " & strDbTable & "Topic.Subject, " & strDbTable & "Forum.Forum_icon, " & strDbTable & "Forum.Forum_URL " & _
 "FROM (((" & strDbTable & "Category INNER JOIN " & strDbTable & "Forum ON " & strDbTable & "Category.Cat_ID = " & strDbTable & "Forum.Cat_ID) LEFT JOIN " & strDbTable & "Topic ON " & strDbTable & "Forum.Last_topic_ID = " & strDbTable & "Topic.Topic_ID) INNER JOIN " & strDbTable & "Author ON " & strDbTable & "Forum.Last_post_author_ID = " & strDbTable & "Author.Author_ID) INNER JOIN " & strDbTable & "Permissions ON " & strDbTable & "Forum.Forum_ID = " & strDbTable & "Permissions.Forum_ID " & _
 "WHERE (" & strDbTable & "Permissions.Author_ID = " & lngLoggedInUserID & " OR " & strDbTable & "Permissions.Group_ID = " & intGroupID & ") " & _
 "ORDER BY " & strDbTable & "Category.Cat_order, " & strDbTable & "Forum.Forum_Order, " & strDbTable & "Permissions.Author_ID DESC;"
@@ -255,11 +260,12 @@ rsCommon.Close
 '14 = Read 
 '15 = Last_topic_ID
 '16 = Topic.Subject
-
+'17 = Forum_icon
+'18 = Forum_URL
 
 
 'Get the last signed up user and member stats and birthdays for use at bottom of page
-If blnDisplayBirthdays Then
+If blnDisplayTodaysBirthdays Then
 	
 	'Get the now date with time off-set
 	dtmNow = getNowDate()
@@ -281,7 +287,6 @@ If blnDisplayBirthdays Then
 		strSQL = strSQL & " LIMIT 50"
 	End If
 	strSQL = strSQL & ";"
-	
 	
 	'Set error trapping
 	On Error Resume Next
@@ -405,30 +410,31 @@ If blnActiveUsers Then
 	saryActiveUsers = activeUsers("", strTxtForumIndex, "default.asp", 0)
 End If
 
+
+
+
 'Set the status bar tools
 'Active Topics Links
 strStatusBarTools = strStatusBarTools & "&nbsp;&nbsp;<img src=""" & strImagePath & "active_topics." & strForumImageType & """ alt=""" & strTxtActiveTopics & """ title=""" & strTxtActiveTopics & """ style=""vertical-align: text-bottom"" /> <a href=""active_topics.asp" & strQsSID1 & """>" & strTxtActiveTopics & "</a> "
 strStatusBarTools = strStatusBarTools & "&nbsp;&nbsp;<img src=""" & strImagePath & "unanswered_topics." & strForumImageType & """ alt=""" & strTxtUnAnsweredTopics & """ title=""" & strTxtUnAnsweredTopics & """ style=""vertical-align: text-bottom"" /> <a href=""active_topics.asp?UA=Y" & strQsSID2 & """>" & strTxtUnAnsweredTopics & "</a> "
 'If RSS XML enabled then display an RSS button to link to XML file
-If blnRSS Then strStatusBarTools = strStatusBarTools & "&nbsp;<a href=""RSS_topic_feed.asp" & SeoUrlTitle(strMainForumName, "?title=") & """ target=""_blank""><img src=""" & strImagePath & "rss." & strForumImageType & """ alt=""" & strTxtRSS & ": " & strTxtNewPostFeed & """ title=""" & strTxtRSS & ": " & strTxtNewPostFeed & """ /></a>"
+If blnRSS Then strStatusBarTools = strStatusBarTools & "&nbsp;<a href=""RSS_topic_feed.asp" & SeoUrlTitle(strMainForumName, "?title=") & """ target=""_blank""><img src=""" & strImagePath & "rss." & strForumImageType & """ alt=""" & strTxtRSS & ": " & strTxtNewPostFeed & """ title=""" & strTxtRSS & " - " & strTxtNewPostFeed & """ /></a>"
 
 %>
 <!-- #include file="includes/browser_page_encoding_inc.asp" -->
-<title><% = strMainForumName %><% If blnLCode Then Response.Write(" - Powered by Web Wiz Forums&trade;") %></title>
-<meta name="generator" content="Web Wiz Forums" />
+<title><% = strMainForumName %><% If blnACode Then Response.Write(" - Powered by Web Wiz Forums&trade;") %></title>
+<meta name="generator" content="Web Wiz Forums <% = strVersion %>" />
+<meta name="description" content="<% = strBoardMetaDescription %>" />
+<meta name="keywords" content="<% = strBoardMetaKeywords %>" />
 <link rel="canonical" href="<% = strForumPath %>" /><%
 
-'***** START WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
-If blnLCode Then	
- 	Response.Write(vbCrLf & "<meta name=""description"" content=""This is a discussion forum powered by Web Wiz Forums. To find out about Web Wiz Forums, go to www.webwizforums.com"" />" & _
- 	vbCrLf & "<meta name=""keywords"" content=""forum, forums, bbs, discussion, bulletin board, message board"" />")
-End If
 
-Response.Write(vbCrLf  & vbCrLf & "<!--//" & _
+'***** START WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
+Response.Write(vbCrLf & vbCrLf & "<!--//" & _
 vbCrLf & "/* *******************************************************" & _
 vbCrLf & "Software: Web Wiz Forums(TM) ver. " & strVersion & "" & _
 vbCrLf & "Info: http://www.webwizforums.com" & _
-vbCrLf & "Copyright: (C)2001-2011 Web Wiz(TM). All rights reserved" & _
+vbCrLf & "Copyright: (C)2001-2011 Web Wiz Ltd. All rights reserved" & _
 vbCrLf & "******************************************************* */" & _
 vbCrLf & "//-->" & vbCrLf)
 '***** END WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
@@ -447,7 +453,7 @@ If blnRSS Then Response.Write(vbCrLf & "<link rel=""alternate"" type=""applicati
 
 'If this is not the first time the user has visted the site display the last visit time and date
 If IsDate(getCookie("lVisit", "LV")) Then
-	If dtmLastVisitDate < CDate(getCookie("lVisit", "LV")) Then
+	If dtmLastVisitDate < DateC(getCookie("lVisit", "LV")) Then
 	   	Response.Write(strTxtYouLastVisitedOn & " " & DateFormat(dtmLastVisitDate) & " " & strTxtAt & " " & TimeFormat(dtmLastVisitDate))
 	End If
 End If
@@ -574,9 +580,14 @@ Else
 				blnRead = CBool(sarryForums(14, intCurrentRecord))
 				If isNumeric(sarryForums(15, intCurrentRecord)) Then lngTopicID = CLng(sarryForums(15, intCurrentRecord)) Else lngTopicID = 0
 				strSubject = sarryForums(16, intCurrentRecord)	
+				strForumImageIcon = sarryForums(17, intCurrentRecord)	
+				strForumURL = sarryForums(18, intCurrentRecord)	
 				
 				'Set the last forum ID for forum stats
 				intLastForumEntryID = intForumID
+				
+				'Remove any parts that could be mistaken for a forum URL
+				If strForumURL = "http://" OR isNull(strForumURL) Then strForumURL = ""
 
 				'If this forum is to be hidden but the user is allowed access to it set the hidden boolen back to false
 				If blnHideForum AND blnRead Then blnHideForum = False
@@ -728,13 +739,18 @@ Else
 								If strSubForums <> "" Then strSubForums = strSubForums & ", "
 								
 								'Display the sub forum
-								strSubForums = strSubForums & "<a href=""forum_topics.asp?FID=" & intSubForumID & strQsSID2 & SeoUrlTitle(strSubForumName, "&title=") & """ class=""smLink"">" & strSubForumName & "</a>"
+								If blnUrlRewrite Then
+									strSubForums = strSubForums & "<a href=""" & SeoUrlTitle(strSubForumName, "") & "_forum" & intSubForumID & ".html" & strQsSID1 & """ class=""smLink"">" & strSubForumName & "</a>"
+								Else
+									strSubForums = strSubForums & "<a href=""forum_topics.asp?FID=" & intSubForumID & strQsSID2 & SeoUrlTitle(strSubForumName, "&title=") & """ class=""smLink"">" & strSubForumName & "</a>"
+								End If
 							End If
 						End If
 						
 						'Move to next record 
 						intTempRecord = intTempRecord + 1
 					Loop
+					
 					
 					
 					'If mobile browser display different content
@@ -745,19 +761,31 @@ Else
 						If (intForumColourNumber MOD 2 = 0 ) Then Response.Write("class=""evenTableRow"">") Else Response.Write("class=""oddTableRow"">") 
 						
 						'Display link to forum
-						Response.Write("<td><a href=""forum_topics.asp?FID=" & intForumID & strQsSID2 & SeoUrlTitle(strForumName, "&title=") & """>" & strForumName & "</a>")
+						If strForumURL = "" Then
+							Response.Write("<td>")
+							
+							If blnUrlRewrite Then
+								Response.Write("<a href=""" & SeoUrlTitle(strForumName, "") & "_forum" & intForumID & ".html" & strQsSID1 & """>" & strForumName & "</a>")
+							Else
+								Response.Write("<a href=""forum_topics.asp?FID=" & intForumID & strQsSID2 & SeoUrlTitle(strForumName, "&title=") & """>" & strForumName & "</a>")
+							End If
+							
+							'Display unread post count to mobile users
+							If intUnReadPostCount = 1 Then
+								Response.Write(" [1 " & strTxtNewPost & "]")
+							ElseIf intUnReadPostCount > 1 Then
+								Response.Write(" [" & intUnReadPostCount & " " & strTxtNewPosts & "]")
+							End If
+							
+							'Display sub forums to mobile users
+							'If strSubForums <> "" Then Response.Write("<br /><span class=""smText"">" & strTxtSub & " " & strTxtForums & ": </span>" & strSubForums)
+							
+							Response.Write("</td></tr>")	
 						
-						'Display unread post count to mobile users
-						If intUnReadPostCount = 1 Then
-							Response.Write(" [1 " & strTxtNewPost & "]")
-						ElseIf intUnReadPostCount > 1 Then
-							Response.Write(" [" & intUnReadPostCount & " " & strTxtNewPosts & "]")
+						'Else is a link
+						Else
+							Response.Write("<td><a href=""" & strForumURL & """>" & strForumName & "</a></td></tr>")
 						End If
-						
-						'Display sub forums to mobile users
-						'If strSubForums <> "" Then Response.Write("<br /><span class=""smText"">" & strTxtSub & " " & strTxtForums & ": </span>" & strSubForums)
-						
-						Response.Write("</td></tr>")	
 					
 					
 					
@@ -773,60 +801,103 @@ Else
 						'Calculate row colour
 						Response.Write(vbCrLf & " <tr ")
 						If (intForumColourNumber MOD 2 = 0 ) Then Response.Write("class=""evenTableRow"">") Else Response.Write("class=""oddTableRow"">") 
+			
+						'If not a external link
+						If strForumURL = "" Then
+							
+							'Display the status forum icons
+							Response.Write(vbCrLf & "   <td align=""center"">")
+							%><!-- #include file="includes/forum_status_icons_inc.asp" --><%
+		     					Response.Write("</td>" & _
+							vbCrLf & "  <td>")
+		
+		
+							
+							'Display forum
+							If blnUrlRewrite Then
+								Response.Write("<a href=""" & SeoUrlTitle(strForumName, "") & "_forum" & intForumID & ".html" & strQsSID1 & """>" & strForumName & "</a>")
+							Else
+								Response.Write("<a href=""forum_topics.asp?FID=" & intForumID & strQsSID2 & SeoUrlTitle(strForumName, "&title=") & """>" & strForumName & "</a>")
+							End If
+							
+							
+					
+							'Display the number of people viewing in that forum
+							If blnForumViewing AND blnActiveUsers Then 
+								If intTotalViewingForum > 0 Then Response.Write(" <span class=""smText"">(" & intTotalViewingForum & " " & strTxtViewing & ")</span>")
+							End If
+							
+							'Display forum details
+							Response.Write("<br />" & strForumDiscription & strSubForums & "</td>" & _
+							vbCrLf & "  <td align=""center"">" & lngNumberOfTopics & "</td>" & _
+							vbCrLf & "  <td align=""center"">" & lngNumberOfPosts & "</td>" & _
+							vbCrLf & "  <td class=""smText"" nowrap=""nowrap"">")
+							If lngNumberOfPosts <> 0 Then 'Don't disply last post details if there are none	
+								
+								'Don't dispaly details if the user has no read access on the forum
+								If blnRead AND strForumPassword = "" Then
+									
+									'Display last post subject
+									If blnUrlRewrite Then
+										Response.Write("<a href=""" & SeoUrlTitle(strSubject, "") & "_topic" & lngTopicID & ".html" & strQsSID1 & """ title=""" & strSubject & """>")
+									Else
+										Response.Write("<a href=""forum_posts.asp?TID=" & lngTopicID & strQsSID2 & SeoUrlTitle(strSubject, "&title=") & """ title=""" & strSubject & """>")
+									End If
+									'Display Shorten subject (decode string first incase it contains allot of encoded characters)
+									strSubject = TrimString(decodeString(strSubject), 30)
+									strSubject = removeAllTags(strSubject)
+									If blnBoldNewTopics AND intUnReadPostCount > 0 Then 'Unread topic subjects in bold
+										Response.Write("<strong>" & strSubject & "</strong>")
+									Else
+										Response.Write(strSubject)
+									End If
+									Response.Write("</a><br />")
+		
+									
+									'Who last post is by
+									Response.Write(strTxtBy & "&nbsp;<a href=""member_profile.asp?PF=" & lngLastEntryUserID & strQsSID2 & """ class=""smLink"">" & strLastEntryUser & "</a> ")
+									'If there are unread posts in the forum display differnt icon
+									If intUnReadPostCount > 0 Then
+										Response.Write("<a href=""get_last_post.asp?TID=" & lngTopicID & strQsSID2 & """><img src=""" & strImagePath & "view_unread_post." & strForumImageType & """ alt=""" & strTxtViewUnreadPost & " [" & intUnReadPostCount & " " & strNewPostText & "]"" title=""" & strTxtViewUnreadPost & " [" & intUnReadPostCount & " " & strNewPostText & "]"" /></a>")
+									
+									'Else there are no unread posts so display a normal last post link
+									Else
+										Response.Write("<a href=""get_last_post.asp?TID=" & lngTopicID & strQsSID2 & """><img src=""" & strImagePath & "view_last_post." & strForumImageType & """ alt=""" & strTxtViewLastPost & """ title=""" & strTxtViewLastPost & """ /></a>")
+									End If
+									
+								End If
+								'Last Post date
+								Response.Write("<br />" & DateFormat(dtmLastEntryDate) & "&nbsp;" &  strTxtAt & "&nbsp;" & TimeFormat(dtmLastEntryDate))
+							End If	
+							Response.Write("</td>"  & _
+							vbCrLf & " </tr>")
 						
-						'Display the status forum icons
-						Response.Write(vbCrLf & "   <td align=""center"">")
-						%><!-- #include file="includes/forum_status_icons_inc.asp" --><%
-		     				Response.Write("</td>" & _
-						vbCrLf & "  <td>")
-						
-						'Display forum
-						Response.Write("<a href=""forum_topics.asp?FID=" & intForumID & strQsSID2 & SeoUrlTitle(strForumName, "&title=") & """>" & strForumName & "</a>")
-				
-						'Display the number of people viewing in that forum
-						If blnForumViewing AND blnActiveUsers Then 
-							If intTotalViewingForum > 0 Then Response.Write(" <span class=""smText"">(" & intTotalViewingForum & " " & strTxtViewing & ")</span>")
+						'Else if forum link
+						Else
+							
+							'Display extrenal link row
+							Response.Write(vbCrLf & "   <td align=""center"">")
+							
+							'Display a custom icon is used for the forum
+							If NOT strForumImageIcon = "" Then 
+
+								'## Start S2H "MultiSkin Selection" Mod ##
+								If InStr( strForumImageIcon, "/" ) < 1 Then
+									strForumImageIcon = strImagePath & strForumImageIcon
+								End If
+								'## End S2H "MultiSkin Selection" Mod ##
+ 
+								Response.Write("<img src=""" & strForumImageIcon & """ border=""0"" alt=""" & strForumIconTitle & """ title=""" & strForumIconTitle & """ />")	
+							Else
+								Response.Write("<img src=""" & strImagePath & "web_link." & strForumImageType & """ border=""0"" alt=""" & strTxtExternalLinkTo & ": " & strForumURL & """ title=""" & strTxtExternalLinkTo & ": " & strForumURL & """ />")	
+							End If
+							
+							'Display extrenal link
+		     					Response.Write("</td><td colspan=""4""><a href=""" & strForumURL & """>" & strForumName & "</a><br />" & strForumDiscription & strSubForums & "</td></td></tr>")
+							
 						End If
 						
-						'Display forum details
-						Response.Write("<br />" & strForumDiscription & strSubForums & "</td>" & _
-						vbCrLf & "  <td align=""center"">" & lngNumberOfTopics & "</td>" & _
-						vbCrLf & "  <td align=""center"">" & lngNumberOfPosts & "</td>" & _
-						vbCrLf & "  <td class=""smText"" nowrap=""nowrap"">")
-						If lngNumberOfPosts <> 0 Then 'Don't disply last post details if there are none	
-							
-							'Don't dispaly details if the user has no read access on the forum
-							If blnRead AND strForumPassword = "" Then
-								
-								'Display last post subject
-								Response.Write("<a href=""forum_posts.asp?TID=" & lngTopicID & strQsSID2 & SeoUrlTitle(strSubject, "&title=") &  """ title=""" & strSubject & """>")
-								If blnBoldNewTopics AND intUnReadPostCount > 0 Then 'Unread topic subjects in bold
-									Response.Write("<strong>" & TrimString(strSubject, 25) & "</strong>")
-								Else
-									Response.Write(TrimString(strSubject, 25))
-								End If
-								Response.Write("</a><br />")
-	
-								
-								'Who last post is by
-								Response.Write(strTxtBy & "&nbsp;<a href=""member_profile.asp?PF=" & lngLastEntryUserID & strQsSID2 & """ class=""smLink"">" & strLastEntryUser & "</a> ")
-								'If there are unread posts in the forum display differnt icon
-								If intUnReadPostCount > 0 Then
-									Response.Write("<a href=""get_last_post.asp?TID=" & lngTopicID & strQsSID2 & """><img src=""" & strImagePath & "view_unread_post." & strForumImageType & """ alt=""" & strTxtViewUnreadPost & " [" & intUnReadPostCount & " " & strNewPostText & "]"" title=""" & strTxtViewUnreadPost & " [" & intUnReadPostCount & " " & strNewPostText & "]"" /></a>")
-								
-								'Else there are no unread posts so display a normal last post link
-								Else
-									Response.Write("<a href=""get_last_post.asp?TID=" & lngTopicID & strQsSID2 & """><img src=""" & strImagePath & "view_last_post." & strForumImageType & """ alt=""" & strTxtViewLastPost & """ title=""" & strTxtViewLastPost & """ /></a>")
-								End If
-								
-							End If
-							'Last Post date
-							Response.Write("<br />" & DateFormat(dtmLastEntryDate) & "&nbsp;" &  strTxtAt & "&nbsp;" & TimeFormat(dtmLastEntryDate))
-						End If	
-						Response.Write("</td>"  & _
-						vbCrLf & " </tr>")
 					End If
-
 
 				End If
 
@@ -891,9 +962,15 @@ Else
 	Loop
 End If
 
+
+
+'Display list of latest forum posts
+If blnShowLatestPosts Then
+	%><!--#include file="includes/latest_posts_inc.asp" --><%
+End If
+
 'Clean up
 Call closeDatabase()
-
 
 'If NewsPad is enabled and we have a URL to it display the Web Wiz NewsPad new bulletins
 If blnWebWizNewsPad AND strWebWizNewsPadURL <> "" Then
@@ -907,23 +984,27 @@ End If
 
 
 'Do not display stats for mobile browsers
-If blnMobileBrowser = False Then
-	
+If blnMobileBrowser = False AND (blnDisplayForumStats OR blnActiveUsers) Then
 %>
 <br />
 <table cellspacing="1" cellpadding="3" class="tableBorder" align="center">
  <tr class="tableLedger">
   <td colspan="2"><% = strTxtWhatsGoingOn %></td>
- </tr>
+ </tr><%
+ 
+ 	'Display forum statis if enabled
+ 	If blnDisplayForumStats Then
+
+%>
  <tr class="tableSubLedger">
   <td colspan="2"><% = strTxtForumStatistics %></td>
  </tr>
  <tr class="tableRow">
   <td width="5%" align="center"><img src="<% = strImagePath %>forum_statistics.<% = strForumImageType %>" alt="<% = strTxtForumStatistics %>" title="<% = strTxtForumStatistics %>" /></td>
   <td width="95%" nowrap="nowrap"><%
-	
+
 	Response.Write(strTxtOurUserHavePosted & " " & FormatNumber(lngTotalNumberOfPosts, 0) & " " & strTxtPostsIn & " " & FormatNumber(lngTotalNumberOfTopics, 0) & " " & strTxtTopicsIn & " " & intNumberofForums & " " & strTxtForums & _
-	"<br />" & strTxtLastPost & "; " & DateFormat(dtmLastEntryDateAllForums) & " " & strTxtAt & " " & TimeFormat(dtmLastEntryDateAllForums) & " " & strTxtBy & " <a href=""member_profile.asp?PF=" & lngLastEntryUserIDAllForums & strQsSID2 & """>" & strLastEntryUserAllForums & "</a>")
+	"<br />" & strTxtLastPost & ", " & DateFormat(dtmLastEntryDateAllForums) & " " & strTxtAt & " " & TimeFormat(dtmLastEntryDateAllForums) & " " & strTxtBy & " <a href=""member_profile.asp?PF=" & lngLastEntryUserIDAllForums & strQsSID2 & """>" & strLastEntryUserAllForums & "</a>")
 	
 	'Display some statistics for the members
 	If lngNoOfMembers > 0 Then
@@ -935,6 +1016,8 @@ If blnMobileBrowser = False Then
 
 %></td>
  </tr><%
+ 
+	End If
 
 
 	'Get the number of active users if enabled
@@ -951,9 +1034,14 @@ If blnMobileBrowser = False Then
 		'Get the active users online
 		For intArrayPass = 1 To UBound(saryActiveUsers, 2)
 		
-			'If this is a guest user then increment the number of active guests veriable
-			If saryActiveUsers(1, intArrayPass) = 2 Then 
+			'If this is a search robot then increment serach robot
+			If Instr(saryActiveUsers(5, intArrayPass), "Search Robot") Then
 				
+				intActiveSearchRobots = intActiveSearchRobots + 1
+				
+			'If this is a guest user then increment the number of active guests veriable	
+			ElseIf saryActiveUsers(1, intArrayPass) = 2 Then 
+					
 				intActiveGuests = intActiveGuests + 1
 			
 			'Else if the user is Anonymous increment the Anonymous count
@@ -973,10 +1061,11 @@ If blnMobileBrowser = False Then
 		intActiveUsers = UBound(saryActiveUsers, 2)
 		
 		'Calculate the members online by using the total - Guests - Annoymouse Members
-		intActiveMembers = intActiveUsers - intActiveGuests - intAnonymousMembers
+		intActiveMembers = intActiveUsers - intActiveGuests - intAnonymousMembers - intActiveSearchRobots
 	
 		
-		Response.Write(strTxtInTotalThereAre & " " & intActiveUsers & " <a href=""active_users.asp" & strQsSID1 & """>" & strTxtActiveUsers & "</a> " & strTxtOnLine & ", " & intActiveGuests & " " & strTxtGuests & ", " & intActiveMembers & " " & strTxtMembers & ", " & intAnonymousMembers & " " & strTxtAnonymousMembers)
+		Response.Write(strTxtInTotalThereAre & " " & intActiveUsers & " <a href=""active_users.asp" & strQsSID1 & """>" & strTxtActiveUsers & "</a> " & strTxtOnLine & ", " & intActiveMembers & " " & strTxtMembers & ", " & intAnonymousMembers & " " & strTxtAnonymousMembers & ", " & intActiveGuests & " " & strTxtGuests & ", " & intActiveSearchRobots & " " & strTxtSearchRobots & _
+			vbCrLf & "   <br />" & strTxtMostUsersEverOnlineWas & " " & lngMostEverActiveUsers & ", " & DateFormat(dtmMostEvenrActiveDate) & " " & strTxtAt & " " & TimeFormat(dtmMostEvenrActiveDate))
 		If strMembersOnline <> "" Then Response.Write(vbCrLf & "   <br />" & strTxtMembers & " " & strTxtOnLine & ": " & strMembersOnline)
 	End If
 
@@ -1030,13 +1119,11 @@ End If
 If blnLCode = True Then
 	If blnTextLinks = True Then
 		Response.Write("<span class=""text"" style=""font-size:10px"">Forum Software by <a href=""http://www.webwizforums.com"" target=""_blank"" style=""font-size:10px"">Web Wiz Forums&reg;</a> version " & strVersion & "</span>")
-		If blnACode Then Response.Write("<span class=""text"" style=""font-size:10px""> [Free Express Edition]")
 	Else
   		Response.Write("<a href=""http://www.webwizforums.com"" target=""_blank""><img src=""webwizforums_image.asp"" border=""0"" title=""Forum Software by Web Wiz Forums&reg; version " & strVersion & """ alt=""Forum Software by Web Wiz Forums&reg; version " & strVersion& """ /></a>")
-  		If blnACode Then Response.Write("<br /><span class=""text"" style=""font-size:10px"">Powered by Web Wiz Forums Free Express Edition</span>")
 	End If
-	
-	Response.Write("<br /><span class=""text"" style=""font-size:10px"">Copyright &copy;2001-2011 Web Wiz</span>")
+
+	Response.Write("<br /><span class=""text"" style=""font-size:10px"">Copyright &copy;2001-2011 Web Wiz Ltd.</span>")
 End If
 '***** END WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
 

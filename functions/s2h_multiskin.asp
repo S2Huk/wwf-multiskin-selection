@@ -6,7 +6,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.3.1
+'**	Version:	3.4.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -34,7 +34,7 @@ Private Function S2HGetUsersSkin()
 
 	if blnS2HSkinUseDatabase AND lngLoggedInUserID <> 2 then
 
-		strSQL = "SELECT " & strDBTable & "Author.Mod_Skin FROM " & strDBTable & "Author WHERE " & strDBTable & "Author.Author_ID = " & lngLoggedInUserID & ";"
+		strSQL = "SELECT Mod_Skin FROM " & strDBTable & "Author WHERE Author_ID = " & lngLoggedInUserID & ";"
 		rsCommon.Open strSQL, adoCon
 		if rsCommon.EOF or rsCommon.BOF then
 			intS2HLoggedInUserSkin	= intS2HMSSDefaultSkin
@@ -70,12 +70,12 @@ End Function
 
 Private Function S2HSetUsersSkin(ByVal intS2HSkinID)
 
-	if isNumeric(intS2HSkinID) then intS2HSkinID = cint(intS2HSkinID) else intS2HSkinID = intS2HMSSDefaultSkin
+	if isNumeric(intS2HSkinID) then intS2HSkinID = clng(intS2HSkinID) else intS2HSkinID = intS2HMSSDefaultSkin
 	if saryS2HSiteSkins(intS2HSkinID, 1) = "" then intS2HSkinID = intS2HMSSDefaultSkin
 
    if intS2HSkinID <> 0 then
 	if blnS2HSkinUseDatabase AND lngLoggedInUserID <> 2 then
-		strSQL = "UPDATE " & strDBTable & "Author SET " & strDBTable & "Author.Mod_Skin = " & intS2HSkinID & " WHERE " & strDBTable & "Author.Author_ID = " & lngLoggedInUserID & ";"
+		strSQL = "UPDATE " & strDBTable & "Author SET Mod_Skin = " & intS2HSkinID & " WHERE Author_ID = " & lngLoggedInUserID & ";"
 		adoCon.Execute(strSQL)
 	else
 		Call setCookie("S2H", "SC", intS2HSkinID, True)
