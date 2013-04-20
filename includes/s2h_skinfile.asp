@@ -6,7 +6,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.4.0
+'**	Version:	3.5.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -59,7 +59,7 @@
 	saryS2HSiteSkins(1,2) = "forum_images/"
 	saryS2HSiteSkins(1,3) = "css_styles/default/"
 	saryS2HSiteSkins(1,4) = " > "
-	saryS2HSiteSkins(1,5) = "WebWizForums"
+	saryS2HSiteSkins(1,5) = "Web Wiz"
 	saryS2HSiteSkins(1,6) = ""
 	saryS2HSiteSkins(1,7) = True
 
@@ -70,7 +70,7 @@
 	saryS2HSiteSkins(2,2) = "forum_images/"
 	saryS2HSiteSkins(2,3) = "css_styles/classic/"
 	saryS2HSiteSkins(2,4) = " > "
-	saryS2HSiteSkins(2,5) = "WebWizForums"
+	saryS2HSiteSkins(2,5) = "Web Wiz"
 	saryS2HSiteSkins(2,6) = ""
 	saryS2HSiteSkins(2,7) = True
 
@@ -81,7 +81,7 @@
 	saryS2HSiteSkins(3,2) = "forum_images/"
 	saryS2HSiteSkins(3,3) = "css_styles/dark/"
 	saryS2HSiteSkins(3,4) = " > "
-	saryS2HSiteSkins(3,5) = "WebWizForums"
+	saryS2HSiteSkins(3,5) = "Web Wiz"
 	saryS2HSiteSkins(3,6) = ""
 	saryS2HSiteSkins(3,7) = True
 
@@ -92,7 +92,7 @@
 	saryS2HSiteSkins(4,2) = "forum_images/"
 	saryS2HSiteSkins(4,3) = "css_styles/web_wiz/"
 	saryS2HSiteSkins(4,4) = " > "
-	saryS2HSiteSkins(4,5) = "WebWizForums"
+	saryS2HSiteSkins(4,5) = "Web Wiz"
 	saryS2HSiteSkins(4,6) = ""
 	saryS2HSiteSkins(4,7) = True
 

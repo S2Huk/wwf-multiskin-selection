@@ -5,7 +5,7 @@
 '**  Web Wiz Forums(TM)
 '**  http://www.webwizforums.com
 '**                            
-'**  Copyright (C)2001-2011 Web Wiz Ltd. All Rights Reserved.
+'**  Copyright (C)2001-2013 Web Wiz Ltd. All Rights Reserved.
 '**  
 '**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM WEB WIZ LTD.
 '**  
@@ -33,7 +33,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.4.0
+'**	Version:	3.5.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -105,10 +105,12 @@ End If
 
 'If there is no extra icons to display with the topic overlay it with a blank image
 If strForumIconSrc = "forum" Then strForumIconSrc = "forum_blank"
+	
+
 
 
 'Display a custom icon is used for the forum
-If NOT strForumImageIcon = "" Then
+If NOT strForumImageIcon = "" Then  
 
 	'## Start S2H "MultiSkin Selection" Mod ##
 	If InStr( strForumImageIcon, "/" ) < 1 Then

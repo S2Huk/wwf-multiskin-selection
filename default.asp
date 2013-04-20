@@ -14,7 +14,7 @@
 '**  Web Wiz Forums(TM)
 '**  http://www.webwizforums.com
 '**                            
-'**  Copyright (C)2001-2011 Web Wiz Ltd. All Rights Reserved.
+'**  Copyright (C)2001-2013 Web Wiz Ltd. All Rights Reserved.
 '**  
 '**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM WEB WIZ LTD.
 '**  
@@ -42,7 +42,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.4.0
+'**	Version:	3.5.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -236,6 +236,38 @@ On Error goto 0
 If NOT rsCommon.EOF Then 
 	sarryForums = rsCommon.GetRows()
 	lngTotalRecords = Ubound(sarryForums,2) + 1
+	
+	'If showing a category check thnat the cat name has not been changed in the page name
+	If intCatShow > 0 Then
+		
+		'Loop through categories to get teh cat name
+		Do While intCurrentRecord <= Ubound(sarryForums,2)
+			
+			'If this is the category get the cat name
+			If CInt(sarryForums(0,intCurrentRecord)) = intCatShow Then strCategory = sarryForums(1,intCurrentRecord)
+			
+			'Move to the next database record
+			intCurrentRecord = intCurrentRecord + 1
+		Loop
+	
+		'Reset loop counter
+		intCurrentRecord = 0
+		
+		
+		'If the title is not included in the link redirect page back to itself with the title included
+		If Request.QueryString("title") <> "" AND Request.QueryString("title") <> SeoUrlTitle(strCategory, "")  Then
+			
+			'Clean up
+			rsCommon.Close
+			Call closeDatabase()
+		
+			'Redirect uback to this file with the correct page name
+			Response.redirect("default.asp?C=" & intCatShow & SeoUrlTitle(strCategory, "&title="))
+			Response.End
+			
+		End If	
+			
+	End If
 End If
 
 'Close the recordset
@@ -262,6 +294,8 @@ rsCommon.Close
 '16 = Topic.Subject
 '17 = Forum_icon
 '18 = Forum_URL
+
+
 
 
 'Get the last signed up user and member stats and birthdays for use at bottom of page
@@ -434,7 +468,7 @@ Response.Write(vbCrLf & vbCrLf & "<!--//" & _
 vbCrLf & "/* *******************************************************" & _
 vbCrLf & "Software: Web Wiz Forums(TM) ver. " & strVersion & "" & _
 vbCrLf & "Info: http://www.webwizforums.com" & _
-vbCrLf & "Copyright: (C)2001-2011 Web Wiz Ltd. All rights reserved" & _
+vbCrLf & "Copyright: (C)2001-2013 Web Wiz Ltd. All rights reserved" & _
 vbCrLf & "******************************************************* */" & _
 vbCrLf & "//-->" & vbCrLf)
 '***** END WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
@@ -459,21 +493,6 @@ If IsDate(getCookie("lVisit", "LV")) Then
 End If
 
 %><br /></td><%
-
-'If the user has not logged in (guest user ID = 2) then show them a quick login form
-If lngLoggedInUserID = 2 AND blnWindowsAuthentication = False AND (blnMemberAPI = False OR blnMemberAPIDisableAccountControl = False) AND blnMobileBrowser = False Then
-	
-	Response.Write(" <td align=""right"" class=""smText"">"  & _
-	vbCrLf & "  <form method=""post"" name=""frmLogin"" id=""frmLogin"" action=""login_user.asp" & strQsSID1 & """>" & strTxtQuickLogin & _
-	vbCrLf & "   <input type=""text"" size=""10"" name=""name"" id=""name"" style=""font-size: 10px;"" tabindex=""1"" />" & _
-	vbCrLf & "   <input type=""password"" size=""10"" name=""password"" id=""password"" style=""font-size: 10px;"" tabindex=""2"" />" & _
-	vbCrLf & "   <input type=""hidden"" name=""NS"" id=""NS"" value=""1"" />" & _
-	vbCrLf & "   <input type=""hidden"" name=""returnURL"" id=""returnURL"" value=""returnURL=default.asp"" />" & _
-	vbCrLf & "   <input type=""submit"" value=""" & strTxtGo & """ style=""font-size: 10px;"" tabindex=""3"" />" & _
-	vbCrLf & "  </form>" & _
-	vbCrLf & " </td>")	
-	
-End If
 
 Response.Write(vbCrLf & " </tr>")
 
@@ -879,14 +898,7 @@ Else
 							Response.Write(vbCrLf & "   <td align=""center"">")
 							
 							'Display a custom icon is used for the forum
-							If NOT strForumImageIcon = "" Then 
-
-								'## Start S2H "MultiSkin Selection" Mod ##
-								If InStr( strForumImageIcon, "/" ) < 1 Then
-									strForumImageIcon = strImagePath & strForumImageIcon
-								End If
-								'## End S2H "MultiSkin Selection" Mod ##
- 
+							If NOT strForumImageIcon = "" Then  
 								Response.Write("<img src=""" & strForumImageIcon & """ border=""0"" alt=""" & strForumIconTitle & """ title=""" & strForumIconTitle & """ />")	
 							Else
 								Response.Write("<img src=""" & strImagePath & "web_link." & strForumImageType & """ border=""0"" alt=""" & strTxtExternalLinkTo & ": " & strForumURL & """ title=""" & strTxtExternalLinkTo & ": " & strForumURL & """ />")	
@@ -1065,7 +1077,7 @@ If blnMobileBrowser = False AND (blnDisplayForumStats OR blnActiveUsers) Then
 	
 		
 		Response.Write(strTxtInTotalThereAre & " " & intActiveUsers & " <a href=""active_users.asp" & strQsSID1 & """>" & strTxtActiveUsers & "</a> " & strTxtOnLine & ", " & intActiveMembers & " " & strTxtMembers & ", " & intAnonymousMembers & " " & strTxtAnonymousMembers & ", " & intActiveGuests & " " & strTxtGuests & ", " & intActiveSearchRobots & " " & strTxtSearchRobots & _
-			vbCrLf & "   <br />" & strTxtMostUsersEverOnlineWas & " " & lngMostEverActiveUsers & ", " & DateFormat(dtmMostEvenrActiveDate) & " " & strTxtAt & " " & TimeFormat(dtmMostEvenrActiveDate))
+			vbCrLf & "   <br />" & strTxtMostUsersEverOnlineWas & " " & lngMostEverActiveUsers & ", " & DateFormat(dtmMostEverActiveDate) & " " & strTxtAt & " " & TimeFormat(dtmMostEverActiveDate))
 		If strMembersOnline <> "" Then Response.Write(vbCrLf & "   <br />" & strTxtMembers & " " & strTxtOnLine & ": " & strMembersOnline)
 	End If
 
@@ -1103,7 +1115,7 @@ End If
 %>
 
 <div align="center">
-<span class="smText"><a href="mark_posts_as_read.asp<% If strSessionID <> "" Then Response.Write("?XID=" & getSessionItem("KEY") & strQsSID2) %>" class="smLink"><% = strTxtMarkAllPostsAsRead %></a> :: <a href="remove_cookies.asp<% If strSessionID <> "" Then Response.Write("?XID=" & getSessionItem("KEY") & strQsSID2) %>" class="smLink"><% = strTxtDeleteCookiesSetByThisForum %></a>
+<span class="smText"><a href="mark_posts_as_read.asp<% If strSessionID <> "" Then Response.Write("?XID=" & getSessionItem("KEY") & strQsSID2) %>" class="smLink"><% = strTxtMarkAllPostsAsRead %></a> :: <a href="remove_cookies.asp<% If strSessionID <> "" Then Response.Write("?XID=" & getSessionItem("KEY") & strQsSID2) %>" class="smLink"><% = strTxtDeleteCookiesSetByThisForum %></a> :: <a href="help.asp<% = strQsSID2 %>#FAQ36" class="smLink"><% = strTxtCookiePrivacyNotice %></a>
 <br /></span><%
 
 'If a mobile browser display an option to switch to and from mobile view
@@ -1123,7 +1135,7 @@ If blnLCode = True Then
   		Response.Write("<a href=""http://www.webwizforums.com"" target=""_blank""><img src=""webwizforums_image.asp"" border=""0"" title=""Forum Software by Web Wiz Forums&reg; version " & strVersion & """ alt=""Forum Software by Web Wiz Forums&reg; version " & strVersion& """ /></a>")
 	End If
 
-	Response.Write("<br /><span class=""text"" style=""font-size:10px"">Copyright &copy;2001-2011 Web Wiz Ltd.</span>")
+	Response.Write("<br /><span class=""text"" style=""font-size:10px"">Copyright &copy;2001-2013 Web Wiz Ltd.</span>")
 End If
 '***** END WARNING - REMOVAL OR MODIFICATION OF THIS CODE WILL VIOLATE THE LICENSE AGREEMENT ******
 

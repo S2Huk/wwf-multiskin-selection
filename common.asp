@@ -26,7 +26,7 @@
 '**  Web Wiz Forums(TM)
 '**  http://www.webwizforums.com
 '**                            
-'**  Copyright (C)2001-2011 Web Wiz Ltd. All Rights Reserved.
+'**  Copyright (C)2001-2013 Web Wiz Ltd. All Rights Reserved.
 '**  
 '**  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS UNDER LICENSE FROM WEB WIZ LTD.
 '**  
@@ -54,7 +54,7 @@
 '**	 Multiskin Selection
 '**	---------------------
 '**
-'**	Version:	3.4.0
+'**	Version:	3.5.0
 '**	Author:		Scotty32
 '**	Website:	http://www.s2h.co.uk/wwf/mods/multiskin-selection/
 '**	Support:	http://www.s2h.co.uk/forum/
@@ -136,8 +136,6 @@ Call getUserData("UID")
 
 
 
-
-
 '******************************************
 '***  	  Setup Last Visit Data        ****
 '******************************************
@@ -155,10 +153,10 @@ If dtmLastVisitDate = "" AND isDate(getCookie("lVisit", "LV")) Then
 	'Intilise the last date variable
 	dtmLastVisitDate = DateC(getCookie("lVisit", "LV"))
 	
-	'Save new cookie
-	Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
+	'Save new cookie (do not set cookies for guests if forum is under EU cookie law)
+	If blnEuCookieLaw = False OR blnGuest = False Then Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
 
-'If the last entry date is not alreay set set it to now
+'If the last entry date is not already set, so set it to now
 ElseIf dtmLastVisitDate = "" Then
 	Call saveSessionItem("LV", internationalDateTime(Now()))
 	dtmLastVisitDate = Now()
@@ -169,15 +167,15 @@ End If
 If IsDate(getCookie("lVisit", "LV")) Then
 
 	If DateC(getCookie("lVisit", "LV")) < DateAdd("n", -1, Now()) Then
-		Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
+		'(do not set cookies for guests if forum is under EU cookie law)
+		If blnEuCookieLaw = False OR blnGuest = False Then Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
 	End If
 
 'If there is no date in the cookie or it is empty then set the date to now()
 Else
-	Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
+	'(do not set cookies for guests if forum is under EU cookie law)
+	If blnEuCookieLaw = False OR blnGuest = False Then Call setCookie("lVisit", "LV", internationalDateTime(Now()), True)
 End If
-
-
 
 
 
@@ -189,22 +187,47 @@ End If
 
 'If a mobile browser, mobile view enabled, and not have a mobile URL
 If blnMobileBrowser AND blnMobileView Then
-
-	'Mobile/Classic View user switch
-	If Request.QueryString("MobileView") = "off" Then
-		Call setCookie("MobileView", "MV", "0", True)
-		blnMobileBrowser = False
-		blnMobileClassicView = True
 	
-	ElseIf Request.QueryString("MobileView") = "on" Then
-		Call setCookie("MobileView", "MV", "1", True)
-		blnMobileBrowser = True
-		blnMobileClassicView = False
+	'If we have to complay with EU cookie law use session to store if mobile view is enabled or not
+	If blnEuCookieLaw AND blnGuest Then
 
-	'Check to see if mobile view is switched off for this session, if so switch blnMobileBrowser to false
-	ElseIf getCookie("MobileView", "MV") = "0" Then 
-		blnMobileBrowser = False
-		blnMobileClassicView = True
+		'Mobile/Classic View user switch
+		If Request.QueryString("MobileView") = "off" Then
+			Call saveSessionItem("MobileView", "0")
+			blnMobileBrowser = False
+			blnMobileClassicView = True
+		
+		ElseIf Request.QueryString("MobileView") = "on" Then
+			Call saveSessionItem("MobileView", "1")
+			blnMobileBrowser = True
+			blnMobileClassicView = False
+	
+		'Check to see if mobile view is switched off for this session, if so switch blnMobileBrowser to false
+		ElseIf getSessionItem("MobileView") = "0" Then 
+			blnMobileBrowser = False
+			blnMobileClassicView = True
+		End If
+		
+	Else
+		
+		'Mobile/Classic View user switch
+		If Request.QueryString("MobileView") = "off" Then
+			Call setCookie("MobileView", "MV", "0", True)
+			blnMobileBrowser = False
+			blnMobileClassicView = True
+		
+		ElseIf Request.QueryString("MobileView") = "on" Then
+			Call setCookie("MobileView", "MV", "1", True)
+			blnMobileBrowser = True
+			blnMobileClassicView = False
+	
+		'Check to see if mobile view is switched off for this session, if so switch blnMobileBrowser to false
+		ElseIf getCookie("MobileView", "MV") = "0" Then 
+			blnMobileBrowser = False
+			blnMobileClassicView = True
+		End If
+		
+		
 	End If
 
 'Else if Mobile View is disable
